@@ -1,0 +1,27 @@
+{
+  "version": 2,
+  "functions": {
+    "api/kaitorix.js": {
+      "runtime": "nodejs18.x",
+      "maxDuration": 15
+    }
+  },
+  "routes": [
+    {
+      "src": "/api/kaitorix",
+      "dest": "/api/kaitorix.js"
+    },
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    },
+    {
+      "src": "/(.*\\.html)",
+      "dest": "/$1"
+    },
+    {
+      "src": "/",
+      "dest": "/step5_ebay_api_test.html"
+    }
+  ]
+}
