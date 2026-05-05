@@ -71,16 +71,34 @@ module.exports = async function handler(req, res) {
       const fetchRes = await fetch(sourceUrl, {
         signal: controller.signal,
         headers: {
-          'User-Agent':      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-          'Accept':          'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-          'Accept-Language': 'ja,en-US;q=0.8,en;q=0.6',
-          'Cache-Control':   'no-cache',
+          'User-Agent':                'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+          'Accept':                    'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+          'Accept-Language':           'ja-JP,ja;q=0.9,en-US;q=0.8,en;q=0.7',
+          'Accept-Encoding':           'gzip, deflate, br',
+          'Referer':                   'https://kaitorix.app/',
+          'Origin':                    'https://kaitorix.app',
+          'Cache-Control':             'no-cache',
+          'Pragma':                    'no-cache',
+          'Upgrade-Insecure-Requests': '1',
+          'Sec-Fetch-Site':            'same-origin',
+          'Sec-Fetch-Mode':            'navigate',
+          'Sec-Fetch-Dest':            'document',
+          'Sec-Fetch-User':            '?1',
         },
       });
       clearTimeout(timer);
 
       debug.fetchStatus = fetchRes.status;
       debug.step        = 'fetch_ok';
+
+      if (fetchRes.status === 403) {
+        return res.status(200).json({
+          ok: false, jan, sourceUrl,
+          error:   'forbidden',
+          message: '買取X側がサーバー取得を拒否しています。手動確認してください。',
+          debug,
+        });
+      }
 
       if (fetchRes.status === 404) {
         return res.status(200).json({
